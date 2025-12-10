@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -22,6 +23,7 @@
             --accent-light: rgba(0, 122, 255, 0.1);
             --border: rgba(0, 0, 0, 0.1);
             --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --danger: #FF3B30;
             --safe-top: env(safe-area-inset-top);
             --safe-bottom: env(safe-area-inset-bottom);
         }
@@ -55,7 +57,6 @@
             overflow-x: hidden;
         }
 
-        /* App Container */
         .app {
             max-width: 500px;
             margin: 0 auto;
@@ -64,7 +65,6 @@
             flex-direction: column;
         }
 
-        /* Header */
         .header {
             position: sticky;
             top: 0;
@@ -75,11 +75,17 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 8px;
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
+            flex: 1;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .header-btn {
@@ -93,19 +99,14 @@
             justify-content: center;
             cursor: pointer;
             font-size: 18px;
+            flex-shrink: 0;
         }
 
-        .back-btn {
+        .header-btn.hidden {
             opacity: 0;
             pointer-events: none;
         }
 
-        .back-btn.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Main Content */
         .content {
             flex: 1;
             padding: 16px;
@@ -113,7 +114,6 @@
             overflow-y: auto;
         }
 
-        /* Tab Bar */
         .tab-bar {
             position: fixed;
             bottom: 0;
@@ -138,7 +138,6 @@
             cursor: pointer;
             color: var(--text-secondary);
             font-size: 10px;
-            transition: color 0.2s;
         }
 
         .tab-item.active {
@@ -149,7 +148,6 @@
             font-size: 24px;
         }
 
-        /* Pages */
         .page {
             display: none;
         }
@@ -158,16 +156,21 @@
             display: block;
         }
 
-        /* Category Grid */
         .category-section {
             margin-bottom: 24px;
         }
 
-        .category-section h2 {
+        .category-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .category-section-header h2 {
             font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 12px;
-            padding-left: 4px;
         }
 
         .category-grid {
@@ -183,9 +186,9 @@
             text-align: center;
             cursor: pointer;
             box-shadow: var(--card-shadow);
-            transition: transform 0.2s, box-shadow 0.2s;
             border: none;
             color: var(--text-primary);
+            position: relative;
         }
 
         .category-item:active {
@@ -203,7 +206,27 @@
             line-height: 1.3;
         }
 
-        /* Phrase Cards */
+        .category-item.add-btn {
+            background: var(--accent-light);
+            border: 2px dashed var(--accent);
+        }
+
+        .category-item.add-btn .emoji {
+            color: var(--accent);
+        }
+
+        .add-category-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-light);
+            border: 2px dashed var(--accent);
+            border-radius: 16px;
+            color: var(--accent);
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
         .phrase-list {
             display: flex;
             flex-direction: column;
@@ -246,14 +269,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
         }
 
         .phrase-card .favorite-btn.favorited {
             background: var(--accent-light);
         }
 
-        /* AI Search */
+        .add-phrase-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-light);
+            border: 2px dashed var(--accent);
+            border-radius: 16px;
+            color: var(--accent);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
         .ai-section {
             margin-bottom: 24px;
         }
@@ -302,7 +338,6 @@
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
 
         .search-btn:disabled {
@@ -386,10 +421,11 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -407,7 +443,6 @@
             color: var(--text-primary);
         }
 
-        /* Settings */
         .settings-section {
             background: var(--bg-secondary);
             border-radius: 16px;
@@ -421,6 +456,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .settings-item:last-child {
@@ -434,7 +471,7 @@
         .settings-item input[type="password"],
         .settings-item input[type="text"] {
             flex: 1;
-            margin-left: 16px;
+            min-width: 120px;
             padding: 8px 12px;
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -454,11 +491,10 @@
         .settings-item .save-btn {
             background: var(--accent);
             color: white;
-            margin-left: 8px;
         }
 
         .settings-item .danger-btn {
-            background: #FF3B30;
+            background: var(--danger);
             color: white;
         }
 
@@ -468,7 +504,10 @@
             color: var(--text-secondary);
         }
 
-        /* Toast */
+        .settings-note a {
+            color: var(--accent);
+        }
+
         .toast {
             position: fixed;
             bottom: 100px;
@@ -489,7 +528,6 @@
             opacity: 1;
         }
 
-        /* Scene Header */
         .scene-header {
             text-align: center;
             margin-bottom: 20px;
@@ -504,22 +542,251 @@
             font-size: 20px;
             font-weight: 600;
         }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .emoji-picker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .emoji-picker button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .emoji-picker button.selected {
+            background: var(--accent-light);
+            border: 2px solid var(--accent);
+        }
+
+        /* Context Menu */
+        .context-menu {
+            position: fixed;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 300;
+            min-width: 150px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .context-menu.visible {
+            display: block;
+        }
+
+        .context-menu button {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+        }
+
+        .context-menu button:active {
+            background: var(--bg-tertiary);
+        }
+
+        .context-menu button.danger {
+            color: var(--danger);
+        }
+
+        /* AI Generate */
+        .level-selector {
+            display: flex;
+            gap: 8px;
+        }
+
+        .level-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .level-btn.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .generated-phrases {
+            margin-top: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .generated-phrase {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .generated-phrase input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 4px;
+        }
+
+        .generated-phrase-content {
+            flex: 1;
+        }
+
+        .generated-phrase .de {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .generated-phrase .zh {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
+
 <body>
     <div class="app">
-        <!-- Header -->
         <header class="header">
-            <button class="header-btn back-btn" id="backBtn" onclick="goBack()">←</button>
+            <button class="header-btn hidden" id="backBtn" onclick="goBack()">←</button>
             <h1 id="headerTitle">德语生存手册</h1>
-            <button class="header-btn" onclick="showPage('settings')">⚙️</button>
+            <button class="header-btn" id="headerRightBtn" onclick="showPage('settings')">⚙️</button>
         </header>
-
-        <!-- Main Content -->
         <main class="content">
-            <!-- Home Page -->
             <div class="page active" id="page-home">
-                <!-- AI Search Section -->
                 <div class="ai-section">
                     <div class="search-box">
                         <h3>🤖 问 AI</h3>
@@ -528,8 +795,7 @@
                             <button class="search-btn" id="aiSearchBtn" onclick="askAI()">查询</button>
                         </div>
                         <div class="ai-loading" id="aiLoading">
-                            <div class="spinner"></div>
-                            <span>思考中...</span>
+                            <div class="spinner"></div><span>思考中...</span>
                         </div>
                         <div class="ai-result" id="aiResult">
                             <div class="german" id="aiResultGerman"></div>
@@ -542,21 +808,17 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Categories -->
                 <div id="categoriesContainer"></div>
+                <button class="add-category-btn" onclick="showAddCategoryModal()">➕ 添加新分类</button>
             </div>
-
-            <!-- Scene Page -->
             <div class="page" id="page-scene">
                 <div class="scene-header" id="sceneHeader">
                     <div class="emoji"></div>
                     <h2></h2>
                 </div>
                 <div class="phrase-list" id="phraseList"></div>
+                <button class="add-phrase-btn" onclick="showAddPhraseModal()">➕ 添加短句</button>
             </div>
-
-            <!-- Favorites Page -->
             <div class="page" id="page-favorites">
                 <div class="empty-state" id="emptyFavorites">
                     <div class="icon">⭐</div>
@@ -565,706 +827,358 @@
                 </div>
                 <div class="phrase-list" id="favoritesList"></div>
             </div>
-
-            <!-- Settings Page -->
             <div class="page" id="page-settings">
                 <div class="settings-section">
-                    <div class="settings-item">
-                        <label>API Key</label>
-                        <input type="password" id="apiKeyInput" placeholder="输入 Gemini API Key">
-                        <button class="save-btn" onclick="saveApiKey()">保存</button>
+                    <div class="settings-item"><label>API Key</label><input type="password" id="apiKeyInput"
+                            placeholder="输入 Gemini API Key"><button class="save-btn" onclick="saveApiKey()">保存</button>
                     </div>
                 </div>
-                <div class="settings-note">
-                    AI 查询功能需要 Gemini API Key。<br>
-                    请访问 <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> 获取。
-                </div>
-
+                <div class="settings-note">AI 功能需要 Gemini API Key。<a href="https://aistudio.google.com/app/apikey"
+                        target="_blank">获取 API Key</a></div>
                 <div class="settings-section">
-                    <div class="settings-item">
-                        <label>清除所有收藏</label>
-                        <button class="danger-btn" onclick="clearFavorites()">清除</button>
-                    </div>
+                    <div class="settings-item"><label>导出数据</label><button class="save-btn"
+                            onclick="exportData()">导出</button></div>
+                    <div class="settings-item"><label>导入数据</label><input type="file" id="importFile" accept=".json"
+                            onchange="importData(event)" style="display:none"><button class="save-btn"
+                            onclick="document.getElementById('importFile').click()">导入</button></div>
+                    <div class="settings-item"><label>恢复默认数据</label><button class="danger-btn"
+                            onclick="resetToDefault()">恢复</button></div>
+                    <div class="settings-item"><label>清除所有收藏</label><button class="danger-btn"
+                            onclick="clearFavorites()">清除</button></div>
                 </div>
             </div>
         </main>
-
-        <!-- Tab Bar -->
         <nav class="tab-bar">
-            <button class="tab-item active" onclick="showPage('home')" data-page="home">
-                <span class="icon">🏠</span>
-                <span>场景</span>
-            </button>
-            <button class="tab-item" onclick="showPage('favorites')" data-page="favorites">
-                <span class="icon">⭐</span>
-                <span>收藏</span>
-            </button>
+            <button class="tab-item active" onclick="showPage('home')" data-page="home"><span
+                    class="icon">🏠</span><span>场景</span></button>
+            <button class="tab-item" onclick="showPage('favorites')" data-page="favorites"><span
+                    class="icon">⭐</span><span>收藏</span></button>
         </nav>
-
-        <!-- Toast -->
         <div class="toast" id="toast"></div>
     </div>
-
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modalTitle">标题</h3><button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+    <div class="context-menu" id="contextMenu"></div>
     <script>
-        // ========== Data ==========
-        const categories = {
-            "餐饮类": [
-                { id: "restaurant", emoji: "🍽️", name: "餐厅点餐" },
-                { id: "cafe", emoji: "☕", name: "咖啡厅" },
-                { id: "fastfood", emoji: "🍔", name: "快餐外卖" },
-                { id: "bar", emoji: "🍺", name: "酒吧夜店" },
-                { id: "bakery", emoji: "🥐", name: "面包店" }
-            ],
-            "出行类": [
-                { id: "transport", emoji: "🚇", name: "公共交通" },
-                { id: "train", emoji: "🚄", name: "火车长途" },
-                { id: "taxi", emoji: "🚕", name: "打车租车" },
-                { id: "directions", emoji: "🗺️", name: "问路指路" },
-                { id: "airport", emoji: "✈️", name: "机场登机" },
-                { id: "car", emoji: "⛽", name: "加油修车" }
-            ],
-            "购物类": [
-                { id: "supermarket", emoji: "🛒", name: "超市购物" },
-                { id: "clothing", emoji: "👗", name: "服装店" },
-                { id: "electronics", emoji: "📱", name: "电器店" },
-                { id: "returns", emoji: "📦", name: "网购退货" }
-            ],
-            "社交类": [
-                { id: "greeting", emoji: "👋", name: "日常问候" },
-                { id: "intro", emoji: "🙋", name: "自我介绍" },
-                { id: "neighbor", emoji: "🏘️", name: "邻居交流" },
-                { id: "thanks", emoji: "🙏", name: "道歉感谢" },
-                { id: "weather", emoji: "🌤️", name: "天气闲聊" }
-            ],
-            "医疗类": [
-                { id: "doctor", emoji: "🏥", name: "看病就医" },
-                { id: "pharmacy", emoji: "💊", name: "药店买药" },
-                { id: "dentist", emoji: "🦷", name: "牙医眼科" }
-            ],
-            "生活类": [
-                { id: "housing", emoji: "🏠", name: "租房找房" },
-                { id: "repair", emoji: "🔧", name: "报修维护" },
-                { id: "post", emoji: "📮", name: "邮局快递" },
-                { id: "bank", emoji: "🏦", name: "银行业务" },
-                { id: "haircut", emoji: "💇", name: "理发美容" },
-                { id: "gym", emoji: "🏋️", name: "健身房" },
-                { id: "laundry", emoji: "🧺", name: "洗衣店" }
-            ],
-            "办事类": [
-                { id: "cityhall", emoji: "🏛️", name: "市政厅" },
-                { id: "telecom", emoji: "📶", name: "电信运营商" }
-            ],
-            "工作类": [
-                { id: "office", emoji: "💼", name: "职场沟通" },
-                { id: "leave", emoji: "🏖️", name: "请假休假" },
-                { id: "interview", emoji: "🤝", name: "面试求职" }
-            ],
-            "紧急类": [
-                { id: "emergency", emoji: "🆘", name: "报警求助" },
-                { id: "complaint", emoji: "📢", name: "投诉维权" }
-            ]
-        };
-
-        const phrases = {
-            restaurant: [
-                { de: "Ich hätte gerne...", zh: "我想要..." },
-                { de: "Die Speisekarte, bitte.", zh: "请给我菜单。" },
-                { de: "Was empfehlen Sie?", zh: "您推荐什么？" },
-                { de: "Ich bin allergisch gegen...", zh: "我对...过敏" },
-                { de: "Ohne ... bitte.", zh: "请不要放..." },
-                { de: "Die Rechnung, bitte.", zh: "请结账。" },
-                { de: "Zusammen oder getrennt?", zh: "一起付还是分开付？" },
-                { de: "Kann ich mit Karte zahlen?", zh: "可以刷卡吗？" },
-                { de: "Das war sehr lecker!", zh: "非常好吃！" },
-                { de: "Haben Sie einen Tisch für zwei?", zh: "有两人的桌子吗？" }
-            ],
-            cafe: [
-                { de: "Einen Kaffee, bitte.", zh: "请来一杯咖啡。" },
-                { de: "Mit Milch oder ohne?", zh: "要加牛奶吗？" },
-                { de: "Zum Mitnehmen, bitte.", zh: "请打包带走。" },
-                { de: "Für hier, bitte.", zh: "在这里喝。" },
-                { de: "Haben Sie Hafermilch?", zh: "有燕麦奶吗？" },
-                { de: "Einen Cappuccino, bitte.", zh: "请来一杯卡布奇诺。" },
-                { de: "Wie viel kostet das?", zh: "这个多少钱？" },
-                { de: "Kann ich hier arbeiten?", zh: "我可以在这里工作吗？" }
-            ],
-            fastfood: [
-                { de: "Zum Mitnehmen oder hier essen?", zh: "带走还是在这儿吃？" },
-                { de: "Einmal Nummer drei, bitte.", zh: "请来一份3号套餐。" },
-                { de: "Mit Pommes?", zh: "要薯条吗？" },
-                { de: "Welche Soße möchten Sie?", zh: "您要什么酱？" },
-                { de: "Ohne Zwiebeln, bitte.", zh: "请不要洋葱。" },
-                { de: "Das ist alles.", zh: "就这些了。" }
-            ],
-            bar: [
-                { de: "Ein Bier, bitte.", zh: "请来一杯啤酒。" },
-                { de: "Was haben Sie vom Fass?", zh: "有什么扎啤？" },
-                { de: "Die Getränkekarte, bitte.", zh: "请给我酒水单。" },
-                { de: "Noch eine Runde!", zh: "再来一轮！" },
-                { de: "Prost!", zh: "干杯！" },
-                { de: "Ist hier noch frei?", zh: "这里有人吗？" }
-            ],
-            bakery: [
-                { de: "Zwei Brötchen, bitte.", zh: "请来两个小面包。" },
-                { de: "Ist das frisch?", zh: "这是新鲜的吗？" },
-                { de: "Ein Stück Kuchen, bitte.", zh: "请来一块蛋糕。" },
-                { de: "Haben Sie Vollkornbrot?", zh: "有全麦面包吗？" },
-                { de: "Das da, bitte.", zh: "请给我那个。" }
-            ],
-            transport: [
-                { de: "Wo ist die nächste U-Bahn?", zh: "最近的地铁站在哪？" },
-                { de: "Eine Fahrkarte nach...", zh: "一张去...的票" },
-                { de: "Welche Linie fährt zum...?", zh: "哪条线去...？" },
-                { de: "Wo muss ich aussteigen?", zh: "我在哪里下车？" },
-                { de: "Muss ich umsteigen?", zh: "我需要换乘吗？" },
-                { de: "Hält dieser Bus in...?", zh: "这辆公交在...停吗？" },
-                { de: "Wann kommt der nächste Zug?", zh: "下一班车什么时候来？" },
-                { de: "Ist dieser Platz frei?", zh: "这个座位有人吗？" }
-            ],
-            train: [
-                { de: "Ich möchte einen Platz reservieren.", zh: "我想预订一个座位。" },
-                { de: "Wann fährt der Zug ab?", zh: "火车什么时候发车？" },
-                { de: "Von welchem Gleis?", zh: "从哪个站台？" },
-                { de: "Hält dieser Zug in...?", zh: "这列车在...停吗？" },
-                { de: "Ist das der Zug nach...?", zh: "这是去...的火车吗？" },
-                { de: "Erste oder zweite Klasse?", zh: "一等座还是二等座？" },
-                { de: "Der Zug hat Verspätung.", zh: "火车晚点了。" }
-            ],
-            taxi: [
-                { de: "Können Sie mich zum... bringen?", zh: "能送我去...吗？" },
-                { de: "Wie viel kostet es ungefähr?", zh: "大概多少钱？" },
-                { de: "Hier ist gut, danke.", zh: "这里停就好，谢谢。" },
-                { de: "Können Sie hier anhalten?", zh: "能在这停吗？" },
-                { de: "Ich brauche eine Quittung.", zh: "我需要一张收据。" },
-                { de: "Haben Sie Wechselgeld?", zh: "有零钱吗？" }
-            ],
-            directions: [
-                { de: "Wie komme ich zum...?", zh: "怎么去...？" },
-                { de: "Ist es weit von hier?", zh: "离这儿远吗？" },
-                { de: "Können Sie mir das auf der Karte zeigen?", zh: "能在地图上给我指一下吗？" },
-                { de: "Geradeaus, dann links.", zh: "直走，然后左转。" },
-                { de: "Ich habe mich verlaufen.", zh: "我迷路了。" },
-                { de: "Wo ist der Ausgang?", zh: "出口在哪？" }
-            ],
-            airport: [
-                { de: "Wo ist der Check-in?", zh: "值机在哪里？" },
-                { de: "Welches Gate?", zh: "哪个登机口？" },
-                { de: "Ich habe nur Handgepäck.", zh: "我只有随身行李。" },
-                { de: "Wo ist die Gepäckausgabe?", zh: "行李提取处在哪？" },
-                { de: "Mein Gepäck ist verloren.", zh: "我的行李丢了。" },
-                { de: "Wo kann ich ein Taxi nehmen?", zh: "哪里可以打车？" }
-            ],
-            car: [
-                { de: "Volltanken, bitte.", zh: "请加满油。" },
-                { de: "Wo ist die nächste Tankstelle?", zh: "最近的加油站在哪？" },
-                { de: "Mein Auto startet nicht.", zh: "我的车打不着火。" },
-                { de: "Ich habe eine Panne.", zh: "我的车抛锚了。" },
-                { de: "Können Sie das reparieren?", zh: "您能修吗？" },
-                { de: "Wie lange dauert das?", zh: "需要多长时间？" }
-            ],
-            supermarket: [
-                { de: "Wo finde ich...?", zh: "...在哪里？" },
-                { de: "Haben Sie...?", zh: "你们有...吗？" },
-                { de: "Das ist alles.", zh: "就这些了。" },
-                { de: "Brauchen Sie eine Tüte?", zh: "需要袋子吗？" },
-                { de: "Kann ich mit Karte zahlen?", zh: "可以刷卡吗？" },
-                { de: "Wo ist die Kasse?", zh: "收银台在哪？" },
-                { de: "Haben Sie das auch in Bio?", zh: "有有机的吗？" }
-            ],
-            clothing: [
-                { de: "Kann ich das anprobieren?", zh: "我可以试穿吗？" },
-                { de: "Haben Sie das in Größe...?", zh: "有...号的吗？" },
-                { de: "Das ist zu groß/klein.", zh: "这个太大/小了。" },
-                { de: "Wo ist die Umkleidekabine?", zh: "试衣间在哪？" },
-                { de: "Kann ich das umtauschen?", zh: "可以换货吗？" },
-                { de: "Haben Sie das in einer anderen Farbe?", zh: "有其他颜色吗？" }
-            ],
-            electronics: [
-                { de: "Funktioniert das mit...?", zh: "这个能配合...使用吗？" },
-                { de: "Wie lange ist die Garantie?", zh: "保修多长时间？" },
-                { de: "Kann ich das zurückgeben?", zh: "可以退货吗？" },
-                { de: "Haben Sie ein Ladekabel für...?", zh: "有...的充电线吗？" },
-                { de: "Das funktioniert nicht.", zh: "这个不工作了。" }
-            ],
-            returns: [
-                { de: "Ich möchte das zurückgeben.", zh: "我想退货。" },
-                { de: "Hier ist die Rechnung.", zh: "这是收据。" },
-                { de: "Es ist kaputt.", zh: "它坏了。" },
-                { de: "Wann bekomme ich mein Geld zurück?", zh: "什么时候能退款？" },
-                { de: "Wo ist die Abholstation?", zh: "自提点在哪？" },
-                { de: "Mein Paket ist nicht angekommen.", zh: "我的包裹没到。" }
-            ],
-            greeting: [
-                { de: "Guten Morgen!", zh: "早上好！" },
-                { de: "Guten Tag!", zh: "你好！" },
-                { de: "Guten Abend!", zh: "晚上好！" },
-                { de: "Wie geht's?", zh: "你好吗？" },
-                { de: "Mir geht's gut, danke.", zh: "我很好，谢谢。" },
-                { de: "Tschüss!", zh: "再见！" },
-                { de: "Bis später!", zh: "待会见！" },
-                { de: "Schönes Wochenende!", zh: "周末愉快！" },
-                { de: "Alles klar?", zh: "还好吗？" },
-                { de: "Mach's gut!", zh: "保重！" }
-            ],
-            intro: [
-                { de: "Ich heiße...", zh: "我叫..." },
-                { de: "Ich komme aus China.", zh: "我来自中国。" },
-                { de: "Ich wohne in...", zh: "我住在..." },
-                { de: "Ich arbeite als...", zh: "我的工作是..." },
-                { de: "Ich lerne Deutsch.", zh: "我在学德语。" },
-                { de: "Freut mich!", zh: "很高兴认识你！" },
-                { de: "Ich bin neu hier.", zh: "我是新来的。" }
-            ],
-            neighbor: [
-                { de: "Kann ich mir... ausleihen?", zh: "我能借一下...吗？" },
-                { de: "Es tut mir leid wegen des Lärms.", zh: "抱歉打扰到您了。" },
-                { de: "Ich wohne nebenan.", zh: "我住隔壁。" },
-                { de: "Können Sie mir bitte helfen?", zh: "您能帮我一下吗？" },
-                { de: "Das Paket ist für Sie.", zh: "这个包裹是给您的。" },
-                { de: "Schönen Tag noch!", zh: "祝您今天愉快！" }
-            ],
-            thanks: [
-                { de: "Danke schön!", zh: "非常感谢！" },
-                { de: "Vielen Dank!", zh: "多谢！" },
-                { de: "Es tut mir leid.", zh: "对不起。" },
-                { de: "Entschuldigung!", zh: "抱歉！" },
-                { de: "Kein Problem.", zh: "没关系。" },
-                { de: "Macht nichts.", zh: "没事。" },
-                { de: "Bitte schön.", zh: "不客气。" },
-                { de: "Das ist sehr nett von Ihnen.", zh: "您人真好。" }
-            ],
-            weather: [
-                { de: "Schönes Wetter heute!", zh: "今天天气真好！" },
-                { de: "Es regnet.", zh: "下雨了。" },
-                { de: "Es ist kalt.", zh: "好冷。" },
-                { de: "Es schneit!", zh: "下雪了！" },
-                { de: "Wie ist das Wetter morgen?", zh: "明天天气怎么样？" },
-                { de: "Der Frühling kommt!", zh: "春天来了！" }
-            ],
-            doctor: [
-                { de: "Ich möchte einen Termin.", zh: "我想预约。" },
-                { de: "Ich habe Schmerzen hier.", zh: "我这里痛。" },
-                { de: "Ich habe Fieber.", zh: "我发烧了。" },
-                { de: "Ich fühle mich nicht gut.", zh: "我感觉不舒服。" },
-                { de: "Seit wann haben Sie das?", zh: "这种情况多久了？" },
-                { de: "Ich brauche eine Krankmeldung.", zh: "我需要病假条。" },
-                { de: "Haben Sie Ihre Versicherungskarte?", zh: "您有保险卡吗？" },
-                { de: "Muss ich ins Krankenhaus?", zh: "我需要去医院吗？" }
-            ],
-            pharmacy: [
-                { de: "Ich brauche etwas gegen...", zh: "我需要治...的药" },
-                { de: "Haben Sie Kopfschmerztabletten?", zh: "有头痛药吗？" },
-                { de: "Wie oft soll ich das nehmen?", zh: "我该多久吃一次？" },
-                { de: "Gibt es Nebenwirkungen?", zh: "有副作用吗？" },
-                { de: "Brauche ich ein Rezept?", zh: "需要处方吗？" },
-                { de: "Haben Sie das rezeptfrei?", zh: "有非处方的吗？" }
-            ],
-            dentist: [
-                { de: "Ich habe Zahnschmerzen.", zh: "我牙痛。" },
-                { de: "Ich brauche eine Füllung.", zh: "我需要补牙。" },
-                { de: "Ich brauche eine neue Brille.", zh: "我需要配新眼镜。" },
-                { de: "Meine Sehkraft hat sich verschlechtert.", zh: "我的视力下降了。" },
-                { de: "Wann ist der nächste freie Termin?", zh: "最近的空档是什么时候？" }
-            ],
-            housing: [
-                { de: "Ich suche eine Wohnung.", zh: "我在找房子。" },
-                { de: "Wie hoch ist die Miete?", zh: "房租多少？" },
-                { de: "Sind Nebenkosten inklusive?", zh: "包含杂费吗？" },
-                { de: "Ab wann ist die Wohnung frei?", zh: "房子什么时候能入住？" },
-                { de: "Wie hoch ist die Kaution?", zh: "押金多少？" },
-                { de: "Kann ich die Wohnung besichtigen?", zh: "我可以看房吗？" },
-                { de: "Sind Haustiere erlaubt?", zh: "可以养宠物吗？" }
-            ],
-            repair: [
-                { de: "Die Heizung funktioniert nicht.", zh: "暖气坏了。" },
-                { de: "Es gibt ein Wasserleck.", zh: "有漏水。" },
-                { de: "Der Strom ist ausgefallen.", zh: "停电了。" },
-                { de: "Die Toilette ist verstopft.", zh: "马桶堵了。" },
-                { de: "Können Sie einen Handwerker schicken?", zh: "能派人来修吗？" },
-                { de: "Es ist dringend!", zh: "很紧急！" }
-            ],
-            post: [
-                { de: "Ich möchte das nach China schicken.", zh: "我想寄这个去中国。" },
-                { de: "Wie lange dauert das?", zh: "需要多长时间？" },
-                { de: "Wie viel kostet das Porto?", zh: "邮费多少？" },
-                { de: "Wo kann ich mein Paket abholen?", zh: "我在哪里取包裹？" },
-                { de: "Ich habe einen Abholschein.", zh: "我有取件单。" },
-                { de: "Per Einschreiben, bitte.", zh: "请用挂号信。" }
-            ],
-            bank: [
-                { de: "Ich möchte ein Konto eröffnen.", zh: "我想开户。" },
-                { de: "Ich möchte Geld überweisen.", zh: "我想转账。" },
-                { de: "Ich möchte Geld abheben.", zh: "我想取钱。" },
-                { de: "Meine Karte funktioniert nicht.", zh: "我的卡不能用了。" },
-                { de: "Wie ist der Wechselkurs?", zh: "汇率是多少？" },
-                { de: "Ich habe meine PIN vergessen.", zh: "我忘了密码。" }
-            ],
-            haircut: [
-                { de: "Nur die Spitzen, bitte.", zh: "请只剪发梢。" },
-                { de: "Etwas kürzer, bitte.", zh: "请剪短一点。" },
-                { de: "Waschen und Schneiden, bitte.", zh: "请洗剪。" },
-                { de: "Ich möchte die Haare färben.", zh: "我想染发。" },
-                { de: "So ist es gut.", zh: "这样就好了。" },
-                { de: "Haben Sie heute noch einen Termin frei?", zh: "今天还有空档吗？" }
-            ],
-            gym: [
-                { de: "Ich möchte mich anmelden.", zh: "我想办卡。" },
-                { de: "Wie viel kostet eine Monatskarte?", zh: "月卡多少钱？" },
-                { de: "Wo sind die Umkleiden?", zh: "更衣室在哪？" },
-                { de: "Kann ich heute probetrainieren?", zh: "今天可以试练吗？" },
-                { de: "Wie funktioniert dieses Gerät?", zh: "这个器械怎么用？" },
-                { de: "Ich möchte meinen Vertrag kündigen.", zh: "我想解约。" }
-            ],
-            laundry: [
-                { de: "Können Sie das reinigen?", zh: "能洗这个吗？" },
-                { de: "Wann kann ich es abholen?", zh: "什么时候可以取？" },
-                { de: "Können Sie diesen Fleck entfernen?", zh: "能去掉这个污渍吗？" },
-                { de: "Ich brauche das dringend.", zh: "我急用。" },
-                { de: "Hier ist mein Abholschein.", zh: "这是我的取衣单。" }
-            ],
-            cityhall: [
-                { de: "Ich möchte mich anmelden.", zh: "我想登记住址。" },
-                { de: "Welche Unterlagen brauche ich?", zh: "我需要什么材料？" },
-                { de: "Wo bekomme ich einen Termin?", zh: "在哪里预约？" },
-                { de: "Wie lange dauert das?", zh: "需要多长时间？" },
-                { de: "Ich brauche eine Bescheinigung.", zh: "我需要一份证明。" },
-                { de: "Wo muss ich unterschreiben?", zh: "我在哪里签字？" }
-            ],
-            telecom: [
-                { de: "Ich möchte eine SIM-Karte kaufen.", zh: "我想买一张SIM卡。" },
-                { de: "Wie viel Datenvolumen habe ich?", zh: "我有多少流量？" },
-                { de: "Ich möchte meinen Tarif wechseln.", zh: "我想换套餐。" },
-                { de: "Mein Internet funktioniert nicht.", zh: "我的网络不能用了。" },
-                { de: "Wann läuft mein Vertrag aus?", zh: "我的合约什么时候到期？" },
-                { de: "Ich möchte kündigen.", zh: "我想解约。" }
-            ],
-            office: [
-                { de: "Ich verstehe.", zh: "我明白了。" },
-                { de: "Ich verstehe nicht.", zh: "我不明白。" },
-                { de: "Können Sie das wiederholen?", zh: "您能重复一下吗？" },
-                { de: "Einen Moment, bitte.", zh: "请稍等。" },
-                { de: "Ich melde mich bei Ihnen.", zh: "我会联系您的。" },
-                { de: "Bis wann brauchen Sie das?", zh: "您什么时候需要？" },
-                { de: "Ich arbeite daran.", zh: "我在处理中。" }
-            ],
-            leave: [
-                { de: "Ich möchte Urlaub beantragen.", zh: "我想请假。" },
-                { de: "Ich bin krank.", zh: "我生病了。" },
-                { de: "Ich komme morgen nicht.", zh: "我明天不来。" },
-                { de: "Ich arbeite von zu Hause.", zh: "我在家办公。" },
-                { de: "Wann kommen Sie zurück?", zh: "您什么时候回来？" }
-            ],
-            interview: [
-                { de: "Ich habe mich für die Stelle beworben.", zh: "我申请了这个职位。" },
-                { de: "Meine Stärken sind...", zh: "我的优势是..." },
-                { de: "Ich habe Erfahrung in...", zh: "我在...方面有经验" },
-                { de: "Ab wann könnte ich anfangen?", zh: "我什么时候可以开始？" },
-                { de: "Haben Sie noch Fragen?", zh: "您还有问题吗？" },
-                { de: "Wie hoch ist das Gehalt?", zh: "工资是多少？" }
-            ],
-            emergency: [
-                { de: "Hilfe!", zh: "救命！" },
-                { de: "Rufen Sie die Polizei!", zh: "请报警！" },
-                { de: "Rufen Sie einen Krankenwagen!", zh: "请叫救护车！" },
-                { de: "Es brennt!", zh: "着火了！" },
-                { de: "Es ist ein Notfall!", zh: "这是紧急情况！" },
-                { de: "Ich brauche Hilfe!", zh: "我需要帮助！" },
-                { de: "Wo ist der nächste Notausgang?", zh: "最近的紧急出口在哪？" }
-            ],
-            complaint: [
-                { de: "Ich möchte mich beschweren.", zh: "我想投诉。" },
-                { de: "Das ist nicht akzeptabel.", zh: "这不能接受。" },
-                { de: "Ich möchte den Manager sprechen.", zh: "我想和经理谈谈。" },
-                { de: "Ich möchte mein Geld zurück.", zh: "我要退款。" },
-                { de: "Das entspricht nicht der Beschreibung.", zh: "这与描述不符。" },
-                { de: "Ich werde das melden.", zh: "我会举报的。" }
-            ]
-        };
-
-        // ========== State ==========
+        const DEFAULT_DATA = { categories: { "餐饮类": [{ id: "restaurant", emoji: "🍽️", name: "餐厅点餐" }, { id: "cafe", emoji: "☕", name: "咖啡厅" }, { id: "fastfood", emoji: "🍔", name: "快餐外卖" }, { id: "bar", emoji: "🍺", name: "酒吧夜店" }, { id: "bakery", emoji: "🥐", name: "面包店" }], "出行类": [{ id: "transport", emoji: "🚇", name: "公共交通" }, { id: "train", emoji: "🚄", name: "火车长途" }, { id: "taxi", emoji: "🚕", name: "打车租车" }, { id: "directions", emoji: "🗺️", name: "问路指路" }, { id: "airport", emoji: "✈️", name: "机场登机" }, { id: "car", emoji: "⛽", name: "加油修车" }], "购物类": [{ id: "supermarket", emoji: "🛒", name: "超市购物" }, { id: "clothing", emoji: "👗", name: "服装店" }, { id: "electronics", emoji: "📱", name: "电器店" }, { id: "returns", emoji: "📦", name: "网购退货" }], "社交类": [{ id: "greeting", emoji: "👋", name: "日常问候" }, { id: "intro", emoji: "🙋", name: "自我介绍" }, { id: "neighbor", emoji: "🏘️", name: "邻居交流" }, { id: "thanks", emoji: "🙏", name: "道歉感谢" }, { id: "weather", emoji: "🌤️", name: "天气闲聊" }], "医疗类": [{ id: "doctor", emoji: "🏥", name: "看病就医" }, { id: "pharmacy", emoji: "💊", name: "药店买药" }, { id: "dentist", emoji: "🦷", name: "牙医眼科" }], "生活类": [{ id: "housing", emoji: "🏠", name: "租房找房" }, { id: "repair", emoji: "🔧", name: "报修维护" }, { id: "post", emoji: "📮", name: "邮局快递" }, { id: "bank", emoji: "🏦", name: "银行业务" }, { id: "haircut", emoji: "💇", name: "理发美容" }, { id: "gym", emoji: "🏋️", name: "健身房" }, { id: "laundry", emoji: "🧺", name: "洗衣店" }], "办事类": [{ id: "cityhall", emoji: "🏛️", name: "市政厅" }, { id: "telecom", emoji: "📶", name: "电信运营商" }], "工作类": [{ id: "office", emoji: "💼", name: "职场沟通" }, { id: "leave", emoji: "🏖️", name: "请假休假" }, { id: "interview", emoji: "🤝", name: "面试求职" }], "紧急类": [{ id: "emergency", emoji: "🆘", name: "报警求助" }, { id: "complaint", emoji: "📢", name: "投诉维权" }] }, phrases: { restaurant: [{ de: "Ich hätte gerne...", zh: "我想要..." }, { de: "Die Speisekarte, bitte.", zh: "请给我菜单。" }, { de: "Was empfehlen Sie?", zh: "您推荐什么？" }, { de: "Die Rechnung, bitte.", zh: "请结账。" }, { de: "Kann ich mit Karte zahlen?", zh: "可以刷卡吗？" }], cafe: [{ de: "Einen Kaffee, bitte.", zh: "请来一杯咖啡。" }, { de: "Zum Mitnehmen, bitte.", zh: "请打包带走。" }, { de: "Für hier, bitte.", zh: "在这里喝。" }], fastfood: [{ de: "Zum Mitnehmen oder hier essen?", zh: "带走还是在这儿吃？" }, { de: "Das ist alles.", zh: "就这些了。" }], bar: [{ de: "Ein Bier, bitte.", zh: "请来一杯啤酒。" }, { de: "Prost!", zh: "干杯！" }], bakery: [{ de: "Zwei Brötchen, bitte.", zh: "请来两个小面包。" }, { de: "Das da, bitte.", zh: "请给我那个。" }], transport: [{ de: "Wo ist die nächste U-Bahn?", zh: "最近的地铁站在哪？" }, { de: "Muss ich umsteigen?", zh: "我需要换乘吗？" }], train: [{ de: "Wann fährt der Zug ab?", zh: "火车什么时候发车？" }, { de: "Von welchem Gleis?", zh: "从哪个站台？" }], taxi: [{ de: "Können Sie mich zum... bringen?", zh: "能送我去...吗？" }, { de: "Hier ist gut, danke.", zh: "这里停就好，谢谢。" }], directions: [{ de: "Wie komme ich zum...?", zh: "怎么去...？" }, { de: "Ich habe mich verlaufen.", zh: "我迷路了。" }], airport: [{ de: "Wo ist der Check-in?", zh: "值机在哪里？" }, { de: "Welches Gate?", zh: "哪个登机口？" }], car: [{ de: "Volltanken, bitte.", zh: "请加满油。" }], supermarket: [{ de: "Wo finde ich...?", zh: "...在哪里？" }, { de: "Das ist alles.", zh: "就这些了。" }], clothing: [{ de: "Kann ich das anprobieren?", zh: "我可以试穿吗？" }], electronics: [{ de: "Wie lange ist die Garantie?", zh: "保修多长时间？" }], returns: [{ de: "Ich möchte das zurückgeben.", zh: "我想退货。" }], greeting: [{ de: "Guten Tag!", zh: "你好！" }, { de: "Wie geht's?", zh: "你好吗？" }, { de: "Tschüss!", zh: "再见！" }], intro: [{ de: "Ich heiße...", zh: "我叫..." }, { de: "Ich komme aus China.", zh: "我来自中国。" }], neighbor: [{ de: "Können Sie mir bitte helfen?", zh: "您能帮我一下吗？" }], thanks: [{ de: "Danke schön!", zh: "非常感谢！" }, { de: "Entschuldigung!", zh: "抱歉！" }], weather: [{ de: "Schönes Wetter heute!", zh: "今天天气真好！" }], doctor: [{ de: "Ich möchte einen Termin.", zh: "我想预约。" }, { de: "Ich habe Schmerzen hier.", zh: "我这里痛。" }], pharmacy: [{ de: "Ich brauche etwas gegen...", zh: "我需要治...的药" }], dentist: [{ de: "Ich habe Zahnschmerzen.", zh: "我牙痛。" }], housing: [{ de: "Ich suche eine Wohnung.", zh: "我在找房子。" }, { de: "Wie hoch ist die Miete?", zh: "房租多少？" }], repair: [{ de: "Die Heizung funktioniert nicht.", zh: "暖气坏了。" }], post: [{ de: "Ich möchte das nach China schicken.", zh: "我想寄这个去中国。" }], bank: [{ de: "Ich möchte ein Konto eröffnen.", zh: "我想开户。" }], haircut: [{ de: "Etwas kürzer, bitte.", zh: "请剪短一点。" }], gym: [{ de: "Ich möchte mich anmelden.", zh: "我想办卡。" }], laundry: [{ de: "Können Sie das reinigen?", zh: "能洗这个吗？" }], cityhall: [{ de: "Ich möchte mich anmelden.", zh: "我想登记住址。" }], telecom: [{ de: "Ich möchte eine SIM-Karte kaufen.", zh: "我想买一张SIM卡。" }], office: [{ de: "Ich verstehe.", zh: "我明白了。" }, { de: "Einen Moment, bitte.", zh: "请稍等。" }], leave: [{ de: "Ich möchte Urlaub beantragen.", zh: "我想请假。" }], interview: [{ de: "Ich habe mich für die Stelle beworben.", zh: "我申请了这个职位。" }], emergency: [{ de: "Hilfe!", zh: "救命！" }, { de: "Rufen Sie die Polizei!", zh: "请报警！" }], complaint: [{ de: "Ich möchte mich beschweren.", zh: "我想投诉。" }] } };
+        const EMOJIS = ['🍽️', '☕', '🍔', '🍺', '🥐', '🚇', '🚄', '🚕', '🗺️', '✈️', '⛽', '🛒', '👗', '📱', '📦', '👋', '🙋', '🏘️', '🙏', '🌤️', '🏥', '💊', '🦷', '🏠', '🔧', '📮', '🏦', '💇', '🏋️', '🧺', '🏛️', '📶', '💼', '🏖️', '🤝', '🆘', '📢', '🎓', '🎭', '🎵', '🏃', '🍳', '🛏️', '🚿', '📚', '💻', '🎮', '🌍', '❤️', '⭐'];
+        let categories = {};
+        let phrases = {};
+        let favorites = [];
         let currentPage = 'home';
         let currentScene = null;
-        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        let currentCategoryKey = null;
         let lastAIResult = null;
+        let longPressTimer = null;
 
-        // ========== Init ==========
+        function loadData() {
+            const saved = localStorage.getItem('germanAppData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                categories = data.categories || {};
+                phrases = data.phrases || {};
+            } else {
+                categories = JSON.parse(JSON.stringify(DEFAULT_DATA.categories));
+                phrases = JSON.parse(JSON.stringify(DEFAULT_DATA.phrases));
+                saveData();
+            }
+            favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        }
+        function saveData() { localStorage.setItem('germanAppData', JSON.stringify({ categories, phrases })); }
         function init() {
+            loadData();
             renderCategories();
             renderFavorites();
             loadApiKey();
-
-            // Enter key for AI search
-            document.getElementById('aiInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') askAI();
-            });
-
-            // Register service worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(console.error);
-            }
+            document.getElementById('aiInput').addEventListener('keypress', e => { if (e.key === 'Enter') askAI(); });
+            document.addEventListener('click', () => hideContextMenu());
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(console.error);
         }
-
-        // ========== Render ==========
         function renderCategories() {
             const container = document.getElementById('categoriesContainer');
             container.innerHTML = '';
-
             for (const [sectionName, items] of Object.entries(categories)) {
                 const section = document.createElement('div');
                 section.className = 'category-section';
-                section.innerHTML = `
-                    <h2>${sectionName}</h2>
-                    <div class="category-grid">
-                        ${items.map(item => `
-                            <button class="category-item" onclick="openScene('${item.id}', '${item.emoji}', '${item.name}')">
-                                <div class="emoji">${item.emoji}</div>
-                                <div class="name">${item.name}</div>
-                            </button>
-                        `).join('')}
-                    </div>
-                `;
+                section.innerHTML = `<div class="category-section-header"><h2>${sectionName}</h2></div><div class="category-grid">${items.map(item => `<button class="category-item" onclick="openScene('${item.id}','${item.emoji}','${item.name}','${sectionName}')" oncontextmenu="showSceneMenu(event,'${sectionName}','${item.id}')" ontouchstart="startLongPress(event,'scene','${sectionName}','${item.id}')" ontouchend="cancelLongPress()"><div class="emoji">${item.emoji}</div><div class="name">${item.name}</div></button>`).join('')}<button class="category-item add-btn" onclick="showAddSceneModal('${sectionName}')"><div class="emoji">➕</div><div class="name">添加</div></button></div>`;
                 container.appendChild(section);
             }
         }
-
         function renderPhrases(sceneId) {
             const list = document.getElementById('phraseList');
             const scenePhrases = phrases[sceneId] || [];
-            
-            list.innerHTML = scenePhrases.map((phrase, idx) => `
-                <div class="phrase-card">
-                    <div class="german">${phrase.de}</div>
-                    <div class="chinese">${phrase.zh}</div>
-                    <button class="favorite-btn ${isFavorite(phrase.de) ? 'favorited' : ''}" 
-                            onclick="toggleFavorite('${escapeHtml(phrase.de)}', '${escapeHtml(phrase.zh)}', this)">
-                        ${isFavorite(phrase.de) ? '⭐' : '☆'}
-                    </button>
-                </div>
-            `).join('');
+            list.innerHTML = scenePhrases.map((p, i) => `<div class="phrase-card" oncontextmenu="showPhraseMenu(event,${i})" ontouchstart="startLongPress(event,'phrase',${i})" ontouchend="cancelLongPress()"><div class="german">${p.de}</div><div class="chinese">${p.zh}</div><button class="favorite-btn ${isFavorite(p.de) ? 'favorited' : ''}" onclick="toggleFavorite('${esc(p.de)}','${esc(p.zh)}',this)">${isFavorite(p.de) ? '⭐' : '☆'}</button></div>`).join('');
         }
-
         function renderFavorites() {
             const list = document.getElementById('favoritesList');
             const empty = document.getElementById('emptyFavorites');
-
-            if (favorites.length === 0) {
-                empty.style.display = 'block';
-                list.innerHTML = '';
-                return;
-            }
-
+            if (favorites.length === 0) { empty.style.display = 'block'; list.innerHTML = ''; return; }
             empty.style.display = 'none';
-            list.innerHTML = favorites.map(phrase => `
-                <div class="phrase-card">
-                    <div class="german">${phrase.de}</div>
-                    <div class="chinese">${phrase.zh}</div>
-                    <button class="favorite-btn favorited" 
-                            onclick="toggleFavorite('${escapeHtml(phrase.de)}', '${escapeHtml(phrase.zh)}', this)">
-                        ⭐
-                    </button>
-                </div>
-            `).join('');
+            list.innerHTML = favorites.map(p => `<div class="phrase-card"><div class="german">${p.de}</div><div class="chinese">${p.zh}</div><button class="favorite-btn favorited" onclick="toggleFavorite('${esc(p.de)}','${esc(p.zh)}',this)">⭐</button></div>`).join('');
         }
-
-        // ========== Navigation ==========
         function showPage(pageName) {
             currentPage = pageName;
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(`page-${pageName}`).classList.add('active');
-
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             const tabBtn = document.querySelector(`.tab-item[data-page="${pageName}"]`);
             if (tabBtn) tabBtn.classList.add('active');
-
             const backBtn = document.getElementById('backBtn');
             const title = document.getElementById('headerTitle');
-
-            if (pageName === 'home') {
-                backBtn.classList.remove('visible');
-                title.textContent = '德语生存手册';
-                currentScene = null;
-            } else if (pageName === 'scene') {
-                backBtn.classList.add('visible');
-            } else if (pageName === 'favorites') {
-                backBtn.classList.remove('visible');
-                title.textContent = '我的收藏';
-                renderFavorites();
-            } else if (pageName === 'settings') {
-                backBtn.classList.add('visible');
-                title.textContent = '设置';
-            }
+            const rightBtn = document.getElementById('headerRightBtn');
+            if (pageName === 'home') { backBtn.classList.add('hidden'); title.textContent = '德语生存手册'; rightBtn.onclick = () => showPage('settings'); rightBtn.textContent = '⚙️'; rightBtn.classList.remove('hidden'); currentScene = null; }
+            else if (pageName === 'scene') { backBtn.classList.remove('hidden'); rightBtn.textContent = '🤖'; rightBtn.classList.remove('hidden'); rightBtn.onclick = () => showAIGenerateModal(); }
+            else if (pageName === 'favorites') { backBtn.classList.add('hidden'); title.textContent = '我的收藏'; rightBtn.classList.add('hidden'); renderFavorites(); }
+            else if (pageName === 'settings') { backBtn.classList.remove('hidden'); title.textContent = '设置'; rightBtn.classList.add('hidden'); }
         }
-
-        function openScene(sceneId, emoji, name) {
-            currentScene = sceneId;
-            const header = document.getElementById('sceneHeader');
-            header.querySelector('.emoji').textContent = emoji;
-            header.querySelector('h2').textContent = name;
+        function openScene(sceneId, emoji, name, categoryKey) {
+            currentScene = sceneId; currentCategoryKey = categoryKey;
+            document.getElementById('sceneHeader').querySelector('.emoji').textContent = emoji;
+            document.getElementById('sceneHeader').querySelector('h2').textContent = name;
             document.getElementById('headerTitle').textContent = name;
-            
             renderPhrases(sceneId);
             showPage('scene');
         }
-
-        function goBack() {
-            if (currentPage === 'scene') {
-                showPage('home');
-            } else if (currentPage === 'settings') {
-                showPage('home');
-            }
-        }
-
-        // ========== Favorites ==========
-        function isFavorite(de) {
-            return favorites.some(f => f.de === de);
-        }
-
+        function goBack() { if (currentPage === 'scene' || currentPage === 'settings') showPage('home'); }
+        function isFavorite(de) { return favorites.some(f => f.de === de); }
         function toggleFavorite(de, zh, btn) {
             const idx = favorites.findIndex(f => f.de === de);
-            if (idx >= 0) {
-                favorites.splice(idx, 1);
-                btn.classList.remove('favorited');
-                btn.textContent = '☆';
-                showToast('已取消收藏');
-            } else {
-                favorites.push({ de, zh });
-                btn.classList.add('favorited');
-                btn.textContent = '⭐';
-                showToast('已收藏');
-            }
+            if (idx >= 0) { favorites.splice(idx, 1); btn.classList.remove('favorited'); btn.textContent = '☆'; showToast('已取消收藏'); }
+            else { favorites.push({ de, zh }); btn.classList.add('favorited'); btn.textContent = '⭐'; showToast('已收藏'); }
             localStorage.setItem('favorites', JSON.stringify(favorites));
-            
-            if (currentPage === 'favorites') {
-                renderFavorites();
-            }
+            if (currentPage === 'favorites') renderFavorites();
         }
-
-        function clearFavorites() {
-            if (confirm('确定要清除所有收藏吗？')) {
-                favorites = [];
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                renderFavorites();
-                showToast('已清除所有收藏');
-            }
-        }
-
-        // ========== AI ==========
+        function clearFavorites() { if (confirm('确定要清除所有收藏吗？')) { favorites = []; localStorage.setItem('favorites', JSON.stringify(favorites)); renderFavorites(); showToast('已清除'); } }
         async function askAI() {
-            const input = document.getElementById('aiInput');
-            const query = input.value.trim();
+            const query = document.getElementById('aiInput').value.trim();
             if (!query) return;
-
             const apiKey = localStorage.getItem('geminiApiKey');
-            if (!apiKey) {
-                showToast('请先在设置中配置 API Key');
-                showPage('settings');
-                return;
-            }
-
+            if (!apiKey) { showToast('请先配置 API Key'); showPage('settings'); return; }
             const btn = document.getElementById('aiSearchBtn');
             const loading = document.getElementById('aiLoading');
             const result = document.getElementById('aiResult');
-
-            btn.disabled = true;
-            loading.classList.add('visible');
-            result.classList.remove('visible');
-
+            btn.disabled = true; loading.classList.add('visible'); result.classList.remove('visible');
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `你是一个德语口语助手。用户想用德语表达以下意思，请给出最地道、最日常的德语口语表达。
-
-用户想说：${query}
-
-请按以下格式回复（只回复这个格式，不要其他内容）：
-德语：[德语句子]
-中文：[中文翻译]
-备注：[简短的使用场景或注意事项，可选]`
-                            }]
-                        }]
-                    })
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `你是德语口语助手。用户想说：${query}\n请回复：\n德语：[德语句子]\n中文：[中文翻译]\n备注：[使用场景]` }] }] })
                 });
-
-                const data = await response.json();
+                const data = await res.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
                 const deMatch = text.match(/德语[：:]\s*(.+)/);
                 const zhMatch = text.match(/中文[：:]\s*(.+)/);
                 const noteMatch = text.match(/备注[：:]\s*(.+)/);
-
                 if (deMatch && zhMatch) {
-                    lastAIResult = {
-                        de: deMatch[1].trim(),
-                        zh: zhMatch[1].trim(),
-                        note: noteMatch ? noteMatch[1].trim() : ''
-                    };
-
+                    lastAIResult = { de: deMatch[1].trim(), zh: zhMatch[1].trim(), note: noteMatch ? noteMatch[1].trim() : '' };
                     document.getElementById('aiResultGerman').textContent = lastAIResult.de;
                     document.getElementById('aiResultChinese').textContent = lastAIResult.zh;
                     document.getElementById('aiResultNote').textContent = lastAIResult.note;
                     result.classList.add('visible');
-                } else {
-                    showToast('AI 返回格式有误，请重试');
-                }
-            } catch (err) {
-                console.error(err);
-                showToast('查询失败，请检查网络或 API Key');
-            } finally {
-                btn.disabled = false;
-                loading.classList.remove('visible');
+                } else showToast('AI返回格式有误');
+            } catch (e) { showToast('查询失败'); console.error(e); }
+            finally { btn.disabled = false; loading.classList.remove('visible'); }
+        }
+        function saveAIResult() { if (lastAIResult && !isFavorite(lastAIResult.de)) { favorites.push({ de: lastAIResult.de, zh: lastAIResult.zh }); localStorage.setItem('favorites', JSON.stringify(favorites)); showToast('已收藏'); } else showToast('已收藏过了'); }
+        function copyAIResult() { if (lastAIResult) { navigator.clipboard.writeText(lastAIResult.de).then(() => showToast('已复制')); } }
+        function loadApiKey() { document.getElementById('apiKeyInput').value = localStorage.getItem('geminiApiKey') || ''; }
+        function saveApiKey() { localStorage.setItem('geminiApiKey', document.getElementById('apiKeyInput').value.trim()); showToast('已保存'); }
+        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }
+        function esc(s) { return s.replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+        // Modal
+        function showModal(title, bodyHtml, footerHtml) { document.getElementById('modalTitle').textContent = title; document.getElementById('modalBody').innerHTML = bodyHtml; document.getElementById('modalFooter').innerHTML = footerHtml; document.getElementById('modalOverlay').classList.add('visible'); }
+        function closeModal(e) { if (!e || e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('visible'); }
+        // Context Menu
+        function showContextMenu(x, y, items) {
+            const menu = document.getElementById('contextMenu');
+            menu.innerHTML = items.map(i => `<button class="${i.danger ? 'danger' : ''}" onclick="${i.action}">${i.icon} ${i.label}</button>`).join('');
+            menu.style.left = Math.min(x, window.innerWidth - 160) + 'px';
+            menu.style.top = Math.min(y, window.innerHeight - 100) + 'px';
+            menu.classList.add('visible');
+        }
+        function hideContextMenu() { document.getElementById('contextMenu').classList.remove('visible'); }
+        function startLongPress(e, type, ...args) { longPressTimer = setTimeout(() => { e.preventDefault(); if (type === 'scene') showSceneMenu(e, args[0], args[1]); else if (type === 'phrase') showPhraseMenu(e, args[0]); }, 500); }
+        function cancelLongPress() { clearTimeout(longPressTimer); }
+        // Add Category
+        function showAddCategoryModal() {
+            showModal('添加分类', `<div class="form-group"><label>分类名称</label><input type="text" id="newCategoryName" placeholder="如：旅游类"></div>`, `<button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="addCategory()">添加</button>`);
+        }
+        function addCategory() {
+            const name = document.getElementById('newCategoryName').value.trim();
+            if (!name) { showToast('请输入名称'); return; }
+            if (categories[name]) { showToast('分类已存在'); return; }
+            categories[name] = [];
+            saveData(); renderCategories(); closeModal(); showToast('已添加');
+        }
+        // Add Scene
+        function showAddSceneModal(categoryKey) {
+            currentCategoryKey = categoryKey;
+            showModal('添加场景', `<div class="form-group"><label>选择图标</label><div class="emoji-picker" id="emojiPicker">${EMOJIS.map(e => `<button type="button" onclick="selectEmoji('${e}')">${e}</button>`).join('')}</div></div><div class="form-group"><label>场景名称</label><input type="text" id="newSceneName" placeholder="如：咖啡厅"></div>`, `<button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="addScene()">添加</button>`);
+        }
+        function selectEmoji(emoji) { document.querySelectorAll('.emoji-picker button').forEach(b => b.classList.remove('selected')); event.target.classList.add('selected'); }
+        function addScene() {
+            const name = document.getElementById('newSceneName').value.trim();
+            const emojiBtn = document.querySelector('.emoji-picker button.selected');
+            const emoji = emojiBtn ? emojiBtn.textContent : '📝';
+            if (!name) { showToast('请输入名称'); return; }
+            const id = 'scene_' + Date.now();
+            categories[currentCategoryKey].push({ id, emoji, name });
+            phrases[id] = [];
+            saveData(); renderCategories(); closeModal(); showToast('已添加');
+        }
+        // Scene Menu
+        function showSceneMenu(e, categoryKey, sceneId) {
+            e.preventDefault();
+            showContextMenu(e.clientX || e.touches?.[0]?.clientX || 100, e.clientY || e.touches?.[0]?.clientY || 100, [
+                { icon: '✏️', label: '编辑', action: `editScene('${categoryKey}','${sceneId}')` },
+                { icon: '🗑️', label: '删除', action: `deleteScene('${categoryKey}','${sceneId}')`, danger: true }
+            ]);
+        }
+        function editScene(categoryKey, sceneId) {
+            hideContextMenu();
+            const scene = categories[categoryKey].find(s => s.id === sceneId);
+            currentCategoryKey = categoryKey;
+            showModal('编辑场景', `<div class="form-group"><label>选择图标</label><div class="emoji-picker">${EMOJIS.map(e => `<button type="button" class="${e === scene.emoji ? 'selected' : ''}" onclick="selectEmoji('${e}')">${e}</button>`).join('')}</div></div><div class="form-group"><label>场景名称</label><input type="text" id="editSceneName" value="${scene.name}"></div>`, `<button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveEditScene('${sceneId}')">保存</button>`);
+        }
+        function saveEditScene(sceneId) {
+            const name = document.getElementById('editSceneName').value.trim();
+            const emojiBtn = document.querySelector('.emoji-picker button.selected');
+            const emoji = emojiBtn ? emojiBtn.textContent : '📝';
+            if (!name) { showToast('请输入名称'); return; }
+            const scene = categories[currentCategoryKey].find(s => s.id === sceneId);
+            scene.name = name; scene.emoji = emoji;
+            saveData(); renderCategories(); closeModal(); showToast('已保存');
+        }
+        function deleteScene(categoryKey, sceneId) {
+            hideContextMenu();
+            if (confirm('确定删除此场景？')) {
+                categories[categoryKey] = categories[categoryKey].filter(s => s.id !== sceneId);
+                delete phrases[sceneId];
+                saveData(); renderCategories(); showToast('已删除');
             }
         }
-
-        function saveAIResult() {
-            if (lastAIResult) {
-                if (!isFavorite(lastAIResult.de)) {
-                    favorites.push({ de: lastAIResult.de, zh: lastAIResult.zh });
-                    localStorage.setItem('favorites', JSON.stringify(favorites));
-                    showToast('已收藏');
-                } else {
-                    showToast('已经收藏过了');
-                }
-            }
+        // Add Phrase
+        function showAddPhraseModal() {
+            showModal('添加短句', `<div class="form-group"><label>德语</label><input type="text" id="newPhraseDE" placeholder="德语短句"></div><div class="form-group"><label>中文</label><input type="text" id="newPhraseZH" placeholder="中文翻译"></div>`, `<button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="addPhrase()">添加</button>`);
         }
-
-        function copyAIResult() {
-            if (lastAIResult) {
-                navigator.clipboard.writeText(lastAIResult.de).then(() => {
-                    showToast('已复制德语');
+        function addPhrase() {
+            const de = document.getElementById('newPhraseDE').value.trim();
+            const zh = document.getElementById('newPhraseZH').value.trim();
+            if (!de || !zh) { showToast('请填写完整'); return; }
+            if (!phrases[currentScene]) phrases[currentScene] = [];
+            phrases[currentScene].push({ de, zh });
+            saveData(); renderPhrases(currentScene); closeModal(); showToast('已添加');
+        }
+        // Phrase Menu
+        function showPhraseMenu(e, idx) {
+            e.preventDefault();
+            showContextMenu(e.clientX || e.touches?.[0]?.clientX || 100, e.clientY || e.touches?.[0]?.clientY || 100, [
+                { icon: '✏️', label: '编辑', action: `editPhrase(${idx})` },
+                { icon: '🗑️', label: '删除', action: `deletePhrase(${idx})`, danger: true }
+            ]);
+        }
+        function editPhrase(idx) {
+            hideContextMenu();
+            const p = phrases[currentScene][idx];
+            showModal('编辑短句', `<div class="form-group"><label>德语</label><input type="text" id="editPhraseDE" value="${p.de}"></div><div class="form-group"><label>中文</label><input type="text" id="editPhraseZH" value="${p.zh}"></div>`, `<button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveEditPhrase(${idx})">保存</button>`);
+        }
+        function saveEditPhrase(idx) {
+            const de = document.getElementById('editPhraseDE').value.trim();
+            const zh = document.getElementById('editPhraseZH').value.trim();
+            if (!de || !zh) { showToast('请填写完整'); return; }
+            phrases[currentScene][idx] = { de, zh };
+            saveData(); renderPhrases(currentScene); closeModal(); showToast('已保存');
+        }
+        function deletePhrase(idx) { hideContextMenu(); if (confirm('确定删除？')) { phrases[currentScene].splice(idx, 1); saveData(); renderPhrases(currentScene); showToast('已删除'); } }
+        // AI Generate
+        function showAIGenerateModal() {
+            showModal('AI 生成短句', `<div class="form-group"><label>德语难度</label><div class="level-selector"><button class="level-btn selected" onclick="selectLevel(this)">A1</button><button class="level-btn" onclick="selectLevel(this)">A2</button><button class="level-btn" onclick="selectLevel(this)">B1</button></div></div><div class="form-group"><label>生成数量</label><select id="aiGenCount"><option value="5">5个</option><option value="10" selected>10个</option><option value="15">15个</option></select></div><button class="btn btn-primary" style="width:100%" onclick="generatePhrases()">🤖 生成短句</button><div class="ai-loading" id="genLoading"><div class="spinner"></div><span>生成中...</span></div><div class="generated-phrases" id="generatedPhrases"></div>`, `<button class="btn btn-secondary" onclick="closeModal()">关闭</button><button class="btn btn-primary" id="addGenBtn" style="display:none" onclick="addGeneratedPhrases()">添加选中</button>`);
+        }
+        function selectLevel(btn) { document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
+        async function generatePhrases() {
+            const apiKey = localStorage.getItem('geminiApiKey');
+            if (!apiKey) { showToast('请先配置 API Key'); return; }
+            const level = document.querySelector('.level-btn.selected').textContent;
+            const count = document.getElementById('aiGenCount').value;
+            const sceneName = document.getElementById('sceneHeader').querySelector('h2').textContent;
+            const loading = document.getElementById('genLoading');
+            const container = document.getElementById('generatedPhrases');
+            loading.classList.add('visible'); container.innerHTML = '';
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `生成${count}个关于"${sceneName}"场景的德语${level}水平日常口语短句。格式：每行一个，用|分隔德语和中文。例如：Guten Tag!|你好！\n只输出短句，不要其他内容。` }] }] })
                 });
+                const data = await res.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                const lines = text.split('\n').filter(l => l.includes('|'));
+                if (lines.length === 0) { showToast('生成失败'); return; }
+                container.innerHTML = lines.map((l, i) => {
+                    const [de, zh] = l.split('|').map(s => s.trim());
+                    return `<div class="generated-phrase"><input type="checkbox" checked id="gen${i}"><div class="generated-phrase-content"><div class="de">${de}</div><div class="zh">${zh}</div></div></div>`;
+                }).join('');
+                document.getElementById('addGenBtn').style.display = 'block';
+            } catch (e) { showToast('生成失败'); console.error(e); }
+            finally { loading.classList.remove('visible'); }
+        }
+        function addGeneratedPhrases() {
+            const items = document.querySelectorAll('.generated-phrase');
+            let added = 0;
+            items.forEach((item, i) => {
+                if (item.querySelector('input').checked) {
+                    const de = item.querySelector('.de').textContent;
+                    const zh = item.querySelector('.zh').textContent;
+                    if (!phrases[currentScene]) phrases[currentScene] = [];
+                    phrases[currentScene].push({ de, zh });
+                    added++;
+                }
+            });
+            saveData(); renderPhrases(currentScene); closeModal(); showToast(`已添加${added}个短句`);
+        }
+        // Export/Import
+        function exportData() {
+            const data = { categories, phrases, favorites };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'german-survival-backup.json';
+            a.click();
+            showToast('已导出');
+        }
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (data.categories) categories = data.categories;
+                    if (data.phrases) phrases = data.phrases;
+                    if (data.favorites) favorites = data.favorites;
+                    saveData();
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                    renderCategories(); renderFavorites();
+                    showToast('已导入');
+                } catch (err) { showToast('导入失败'); }
+            };
+            reader.readAsText(file);
+        }
+        function resetToDefault() {
+            if (confirm('确定恢复默认数据？自定义内容将丢失。')) {
+                categories = JSON.parse(JSON.stringify(DEFAULT_DATA.categories));
+                phrases = JSON.parse(JSON.stringify(DEFAULT_DATA.phrases));
+                saveData(); renderCategories(); showToast('已恢复');
             }
         }
-
-        // ========== Settings ==========
-        function loadApiKey() {
-            const key = localStorage.getItem('geminiApiKey') || '';
-            document.getElementById('apiKeyInput').value = key;
-        }
-
-        function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            localStorage.setItem('geminiApiKey', key);
-            showToast('API Key 已保存');
-        }
-
-        // ========== Utils ==========
-        function escapeHtml(str) {
-            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('visible');
-            setTimeout(() => toast.classList.remove('visible'), 2000);
-        }
-
-        // Init
         init();
     </script>
 </body>
+
 </html>
