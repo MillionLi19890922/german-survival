@@ -1111,10 +1111,19 @@
             const loading = document.getElementById('genLoading');
             const container = document.getElementById('generatedPhrases');
             loading.classList.add('visible'); container.innerHTML = '';
+            const currentPhrases = (phrases[currentScene] || []).map(p => p.de).join(', ');
             try {
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: `生成${count}个关于"${sceneName}"场景的德语${level}水平日常口语短句。格式：每行一个，用|分隔德语和中文。例如：Guten Tag!|你好！\n只输出短句，不要其他内容。` }] }] })
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `生成${count}个关于"${sceneName}"场景的德语${level}水平日常口语短句。
+已有短句（请绝对不要重复以下内容）：${currentPhrases}
+格式：每行一个，用|分隔德语和中文。例如：Guten Tag!|你好！
+只输出短句，不要其他内容。` }]
+                        }]
+                    })
                 });
                 const data = await res.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
