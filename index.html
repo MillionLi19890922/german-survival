@@ -208,24 +208,26 @@
 
         .more-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 24px;
-            height: 24px;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
             border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 16px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 10;
             border-radius: 50%;
+            transition: background 0.2s;
         }
 
         .more-btn:active {
-            background: var(--bg-tertiary);
+            background: var(--border);
         }
 
         .category-item .emoji {
@@ -292,7 +294,7 @@
         .phrase-card .favorite-btn {
             position: absolute;
             top: 12px;
-            right: 44px;
+            right: 52px;
             width: 32px;
             height: 32px;
             border: none;
@@ -303,13 +305,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.2s;
         }
 
         .phrase-card .more-btn {
             top: 12px;
-            right: 10px;
-            width: 32px;
-            height: 32px;
+            right: 12px;
         }
 
         .phrase-card .favorite-btn.favorited {
@@ -1050,11 +1051,21 @@
         function showModal(title, bodyHtml, footerHtml) { document.getElementById('modalTitle').textContent = title; document.getElementById('modalBody').innerHTML = bodyHtml; document.getElementById('modalFooter').innerHTML = footerHtml; document.getElementById('modalOverlay').classList.add('visible'); }
         function closeModal(e) { if (!e || e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('visible'); }
         // Context Menu
-        function showContextMenu(x, y, items) {
+        function showContextMenu(rect, items) {
             const menu = document.getElementById('contextMenu');
             menu.innerHTML = items.map(i => `<button class="${i.danger ? 'danger' : ''}" onclick="${i.action}">${i.icon} ${i.label}</button>`).join('');
-            menu.style.left = Math.min(x, window.innerWidth - 160) + 'px';
-            menu.style.top = Math.min(y, window.innerHeight - 100) + 'px';
+
+            // Position menu relative to the button
+            let left = rect.left - 120; // Default: show to left of button
+            let top = rect.bottom + 8;  // Default: show below button
+
+            // Boundary checks
+            if (left < 10) left = 10;
+            if (left + 150 > window.innerWidth) left = window.innerWidth - 160;
+            if (top + 100 > window.innerHeight) top = rect.top - 100; // Show above if no space below
+
+            menu.style.left = left + 'px';
+            menu.style.top = top + 'px';
             menu.classList.add('visible');
         }
         function hideContextMenu() { document.getElementById('contextMenu').classList.remove('visible'); }
@@ -1089,8 +1100,9 @@
         }
         // Scene Menu
         function showSceneMenu(e, categoryKey, sceneId) {
-            e.preventDefault();
-            showContextMenu(e.clientX || e.touches?.[0]?.clientX || 100, e.clientY || e.touches?.[0]?.clientY || 100, [
+            e.stopPropagation();
+            const rect = e.target.getBoundingClientRect();
+            showContextMenu(rect, [
                 { icon: '✏️', label: '编辑', action: `editScene('${categoryKey}','${sceneId}')` },
                 { icon: '🗑️', label: '删除', action: `deleteScene('${categoryKey}','${sceneId}')`, danger: true }
             ]);
@@ -1132,8 +1144,9 @@
         }
         // Phrase Menu
         function showPhraseMenu(e, idx) {
-            e.preventDefault();
-            showContextMenu(e.clientX || e.touches?.[0]?.clientX || 100, e.clientY || e.touches?.[0]?.clientY || 100, [
+            e.stopPropagation();
+            const rect = e.target.getBoundingClientRect();
+            showContextMenu(rect, [
                 { icon: '✏️', label: '编辑', action: `editPhrase(${idx})` },
                 { icon: '🗑️', label: '删除', action: `deletePhrase(${idx})`, danger: true }
             ]);
