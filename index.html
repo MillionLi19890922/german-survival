@@ -208,14 +208,8 @@
 
         .more-btn {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 32px;
-            height: 32px;
-            border: none;
             background: var(--bg-tertiary);
             color: var(--text-primary);
-            font-size: 18px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -224,6 +218,30 @@
             z-index: 10;
             border-radius: 50%;
             transition: background 0.2s;
+        }
+
+        /* Specific style for category tiles (smaller, transparent) */
+        .category-item .more-btn {
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .category-item .more-btn:active {
+            background: var(--bg-tertiary);
+        }
+
+        /* Specific style for phrase rows (larger, consistent with favorites) */
+        .phrase-card .more-btn {
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
         }
 
         .more-btn:active {
