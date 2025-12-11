@@ -184,15 +184,48 @@
             border-radius: 16px;
             padding: 16px 8px;
             text-align: center;
-            cursor: pointer;
             box-shadow: var(--card-shadow);
             border: none;
             color: var(--text-primary);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .category-item:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
+        }
+
+        .category-content {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .more-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 50%;
+        }
+
+        .more-btn:active {
+            background: var(--bg-tertiary);
         }
 
         .category-item .emoji {
@@ -209,6 +242,7 @@
         .category-item.add-btn {
             background: var(--accent-light);
             border: 2px dashed var(--accent);
+            cursor: pointer;
         }
 
         .category-item.add-btn .emoji {
@@ -258,7 +292,7 @@
         .phrase-card .favorite-btn {
             position: absolute;
             top: 12px;
-            right: 12px;
+            right: 44px;
             width: 32px;
             height: 32px;
             border: none;
@@ -269,6 +303,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .phrase-card .more-btn {
+            top: 12px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
         }
 
         .phrase-card .favorite-btn.favorited {
@@ -908,14 +949,27 @@
             for (const [sectionName, items] of Object.entries(categories)) {
                 const section = document.createElement('div');
                 section.className = 'category-section';
-                section.innerHTML = `<div class="category-section-header"><h2>${sectionName}</h2></div><div class="category-grid">${items.map(item => `<button class="category-item" onclick="openScene('${item.id}','${item.emoji}','${item.name}','${sectionName}')" oncontextmenu="showSceneMenu(event,'${sectionName}','${item.id}')" ontouchstart="startLongPress(event,'scene','${sectionName}','${item.id}')" ontouchend="cancelLongPress()"><div class="emoji">${item.emoji}</div><div class="name">${item.name}</div></button>`).join('')}<button class="category-item add-btn" onclick="showAddSceneModal('${sectionName}')"><div class="emoji">➕</div><div class="name">添加</div></button></div>`;
+                section.innerHTML = `<div class="category-section-header"><h2>${sectionName}</h2></div><div class="category-grid">${items.map(item => `
+            <div class="category-item">
+                <div class="category-content" onclick="openScene('${item.id}','${item.emoji}','${item.name}','${sectionName}')">
+                    <div class="emoji">${item.emoji}</div>
+                    <div class="name">${item.name}</div>
+                </div>
+                <button class="more-btn" onclick="showSceneMenu(event,'${sectionName}','${item.id}')">⋮</button>
+            </div>`).join('')}<div class="category-item add-btn" onclick="showAddSceneModal('${sectionName}')"><div class="emoji">➕</div><div class="name">添加</div></div></div>`;
                 container.appendChild(section);
             }
         }
         function renderPhrases(sceneId) {
             const list = document.getElementById('phraseList');
             const scenePhrases = phrases[sceneId] || [];
-            list.innerHTML = scenePhrases.map((p, i) => `<div class="phrase-card" oncontextmenu="showPhraseMenu(event,${i})" ontouchstart="startLongPress(event,'phrase',${i})" ontouchend="cancelLongPress()"><div class="german">${p.de}</div><div class="chinese">${p.zh}</div><button class="favorite-btn ${isFavorite(p.de) ? 'favorited' : ''}" onclick="toggleFavorite('${esc(p.de)}','${esc(p.zh)}',this)">${isFavorite(p.de) ? '⭐' : '☆'}</button></div>`).join('');
+            list.innerHTML = scenePhrases.map((p, i) => `
+        <div class="phrase-card">
+            <div class="german">${p.de}</div>
+            <div class="chinese">${p.zh}</div>
+            <button class="favorite-btn ${isFavorite(p.de) ? 'favorited' : ''}" onclick="toggleFavorite('${esc(p.de)}','${esc(p.zh)}',this)">${isFavorite(p.de) ? '⭐' : '☆'}</button>
+            <button class="more-btn" onclick="showPhraseMenu(event,${i})">⋮</button>
+        </div>`).join('');
         }
         function renderFavorites() {
             const list = document.getElementById('favoritesList');
